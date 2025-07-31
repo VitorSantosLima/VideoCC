@@ -28,14 +28,44 @@
       }
     }
 
+    async function login() {
+      // Choose NODE_n depends on the Voximplant account node
+      const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9
+      try {
+        await sdk.init({
+          node: ACCOUNT_NODE,
+          queueType:VoxImplant.QueueTypes.SmartQueue,
+          micRequired: true,
+          showDebugInfo: true,
+          showWarnings: true
+        });
+        // SDK initialized
+      } catch (e) {
+        // SDK init failure
+      }
+      
+      await sdk.connect();
+      
+      sdk.on(VoxImplant.Events.AuthResult, function (e) {
+        if (e.result === true){
+          console.log("Login com sucesso")
+          sdk.setOperatorACDStatus(VoxImplant.OperatorACDStatuses.Ready);
+          console.log("Status alterado para Ready")
+        } else {
+          console.log(e.code, e.message);
+        }
+
+      });
+
+      await sdk.login(`user@videocontactcenter.vlima.voximplant.com`, "12345678");    
+    }
+
     async function startCall() {
       await sdk.init({
         micRequired: true,
         videoSupport: true,
         node: ACCOUNT_NODE
       });
-
-      await sdk.connect();
 
       call = sdk.call({
         number: "client",

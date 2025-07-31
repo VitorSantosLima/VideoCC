@@ -61,6 +61,7 @@
     }
 
     async function startCall() {
+      await login();
       await sdk.init({
         micRequired: true,
         videoSupport: true,

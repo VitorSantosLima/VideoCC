@@ -9,21 +9,25 @@
   <input type="password" id="password" placeholder="Senha">
   <button onclick="login()">Login</button>
   <br><br>
-  <button value="answer">Accept Call</button>
-  <button value="reject">Decline Call</button>
+  <button id="answer" onclick="acceptCall()">Accept Call</button>
+  <button id="decline" onclick="decline()">Decline Call</button>
   <br><br>
   
   <select id="statusSelect">
     <option value="Ready">Ready</option>
     <option value="Online">Online</option>
-    <option value="Offline">Online</option>  
+    <option value="Offline">Offline</option>  
   </select>
-
   <button onclick="statusChange()">Atualizar Status</button>
-
+  <br><br> 
+  <video id="localVideo" autoplay muted playsinline style="width: 200px; border: 1px solid #ccc;"></video>
   <video id="remoteVideo" autoplay playsinline></video>
+  
+  
   <script>
-    const sdk = VoxImplant.getInstance();
+    const sdk = VoxImplant.getInstance()
+    let currentCall = null;
+
     async function login() {
       // Choose NODE_n depends on the Voximplant account node
       const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9
@@ -35,9 +39,10 @@
           showDebugInfo: true,
           showWarnings: true
         });
-        // SDK initialized
+        console.log("sdk inicializado");
       } catch (e) {
         // SDK init failure
+        console.error("Falha: ", e);
       }
       
       await sdk.connect();
@@ -45,6 +50,10 @@
       sdk.on(VoxImplant.Events.AuthResult, function (e) {
         if (e.result === true){
           console.log("Login com sucesso")
+
+          sdk.createLocalMedia({ video: true, audio: true}).then((media) => {
+            document.getElementById("localVideo").srcObject = media.stream;
+          });
         } else {
           console.log(e.code, e.message);
         }
@@ -53,10 +62,8 @@
 
       const login = document.getElementById("login").value;
       const password = document.getElementById("password").value;
-      agentId = login;
 
       await sdk.login(`${login}@videocontactcenter.vlima.voximplant.com`, password);
-      
     }
 
     async function statusChange() {
@@ -66,6 +73,33 @@
         console.log("Status atualizado para:", newStatus);
       } catch (e) {
         console.error("Erro ao atualizar status:", e);
+      }
+    }
+
+    sdk.on(VoxImplant.Events.IncomingCall, function (e) {
+      console.log("Chamada Recebida");
+      currentCall = e.call;
+
+      currentCall.on(VoxImplant.CallEvents.StreamAdded, function (e) {
+        document.getElementById("remoteVideo").srcObject = e.stream;
+      });
+
+      currentCall.on(VoxImplant.CallEvents.Disconnected, function () {
+        console.log("Chamada encerrada");
+        document.getElementById("remoteVideo").srcObject = null;
+      });
+    });
+
+    function acceptCall () {
+      if (currentCall) {
+        currentCall.answer({ video: { sendVideo: true, receiveVideo: true } });
+      }
+    }
+
+    function declineCall () {
+      if (currentCall) {
+        currentCall.decline();
+        currentCall = null;
       }
     }
 

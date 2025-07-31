@@ -1,0 +1,74 @@
+<html>
+<head>
+  <title>Agente - Video Call</title>
+  <script src="https://cdn.jsdelivr.net/npm/voximplant-websdk@4.9.0-2915/voximplant.min.js"></script>
+</head>
+<body>
+  <h2>Agente</h2>
+  <input type="user" id="login" placeholder="User Name">
+  <input type="password" id="password" placeholder="Senha">
+  <button onclick="login()">Login</button>
+  <br><br>
+  <button value="answer">Accept Call</button>
+  <button value="reject">Decline Call</button>
+  <br><br>
+  
+  <select id="statusSelect">
+    <option value="Ready">Ready</option>
+    <option value="Online">Online</option>
+    <option value="Offline">Online</option>  
+  </select>
+
+  <button onclick="statusChange()">Atualizar Status</button>
+
+  <video id="remoteVideo" autoplay playsinline></video>
+  <script>
+    const sdk = VoxImplant.getInstance();
+    async function login() {
+      // Choose NODE_n depends on the Voximplant account node
+      const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9
+      try {
+        await sdk.init({
+          node: ACCOUNT_NODE,
+          queueType:VoxImplant.QueueTypes.SmartQueue,
+          micRequired: true,
+          showDebugInfo: true,
+          showWarnings: true
+        });
+        // SDK initialized
+      } catch (e) {
+        // SDK init failure
+      }
+      
+      await sdk.connect();
+      
+      sdk.on(VoxImplant.Events.AuthResult, function (e) {
+        if (e.result === true){
+          console.log("Login com sucesso")
+        } else {
+          console.log(e.code, e.message);
+        }
+
+      });
+
+      const login = document.getElementById("login").value;
+      const password = document.getElementById("password").value;
+      agentId = login;
+
+      await sdk.login(`${login}@videocontactcenter.vlima.voximplant.com`, password);
+      
+    }
+
+    async function statusChange() {
+      const newStatus = document.getElementById("statusSelect").value;
+      try {
+        await sdk.setOperatorACDStatus(VoxImplant.OperatorACDStatuses[newStatus], newStatus);
+        console.log("Status atualizado para:", newStatus);
+      } catch (e) {
+        console.error("Erro ao atualizar status:", e);
+      }
+    }
+
+  </script>
+</body>
+</html>

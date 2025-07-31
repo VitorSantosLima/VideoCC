@@ -1,0 +1,66 @@
+<html>
+<head>
+  <title>Cliente - Video Call</title>
+  <script src="https://cdn.jsdelivr.net/npm/voximplant-websdk@4.9.0-2915/voximplant.min.js"></script>
+</head>
+<body>
+  <h2>Cliente - Video Call</h2>
+
+  <video id="localVideo" autoplay muted playsinline style="width: 300px; border: 1px solid gray;"></video>
+  <video id="remoteVideo" autoplay playsinline style="width: 300px; border: 1px solid gray;"></video>
+  <br><br>
+
+  <button onclick="startCall()" disabled id="callButton">Iniciar Chamada</button>
+
+  <script>
+    const sdk = VoxImplant.getInstance();
+    const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9;
+    let call, localStream;
+
+    async function initPreview() {
+      try {
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        document.getElementById("localVideo").srcObject = localStream;
+        document.getElementById("callButton").disabled = false;
+      } catch (e) {
+        console.error("Erro ao acessar câmera/mic:", e);
+        alert("Não foi possível acessar sua câmera/microfone. Verifique as permissões.");
+      }
+    }
+
+    async function startCall() {
+      await sdk.init({
+        micRequired: true,
+        videoSupport: true,
+        node: ACCOUNT_NODE
+      });
+
+      await sdk.connect();
+
+      call = sdk.call({
+        number: "client", // Envia para a regra que executa o scenario.js
+        video: { sendVideo: true, receiveVideo: true }
+      });
+
+      call.on(VoxImplant.CallEvents.Connected, () => {
+        console.log("Chamada conectada");
+      });
+
+      call.on(VoxImplant.CallEvents.Failed, (e) => {
+        console.error("Falha na chamada:", e);
+      });
+
+      call.on(VoxImplant.CallEvents.Disconnected, () => {
+        console.log("Chamada encerrada");
+      });
+
+      call.on(VoxImplant.CallEvents.StreamAdded, (e) => {
+        document.getElementById("remoteVideo").srcObject = e.stream;
+      });
+    }
+
+    window.onload = initPreview;
+  </script>
+</body>
+</html>
+

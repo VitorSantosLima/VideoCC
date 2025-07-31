@@ -62,11 +62,11 @@
 
     async function startCall() {
       await login();
-      await sdk.init({
-        micRequired: true,
-        videoSupport: true,
-        node: ACCOUNT_NODE
-      });
+      //await sdk.init({
+      //  micRequired: true,
+      //  videoSupport: true,
+      //  node: ACCOUNT_NODE
+      //});
 
       call = sdk.call({
         number: "client",

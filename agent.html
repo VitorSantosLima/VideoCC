@@ -87,6 +87,7 @@
       currentCall = e.call;
 
       currentCall.on(VoxImplant.CallEvents.StreamAdded, function (e) {
+        console.log("PASSEI PELO STREAMADD");
         document.getElementById("remoteVideo").srcObject = e.stream;
       });
 

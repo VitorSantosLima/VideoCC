@@ -7,10 +7,11 @@
   <h2>Cliente - Video Call</h2>
 
   <video id="localVideo" autoplay muted playsinline style="width: 300px; border: 1px solid gray;"></video>
-  <div class="remoteVideo" id="remoteVideo">
+  <!-- <div class="remoteVideo" id="remoteVideo">
     <div class="white-circle"></div>
   </div>
-  <br><br>
+  <br><br> -->
+  <video id="remoteVideo" autoplay playsinline></video>
 
   <button onclick="startCall()" disabled id="callButton">Iniciar Chamada</button>
   <button onclick="endCall()">Finalizar Chamada</button>
@@ -66,11 +67,6 @@
 
     async function startCall() {
       await login();
-      //await sdk.init({
-      //  micRequired: true,
-      //  videoSupport: true,
-      //  node: ACCOUNT_NODE
-      //});
 
       call = sdk.call({
         number: "client",
@@ -79,16 +75,6 @@
 
       call.on(VoxImplant.CallEvents.Connected, () => {
         console.log("Chamada conectada");
-        //call.on(VoxImplant.CallEvents.StreamAdded, (e) => {
-        //  call.sendVideo(true);
-          //console.log("Stream recebido: ", e.stream);
-          //const remoteVideo = document.getElementById("remoteVideo");
-          //remoteVideo.srcObject = e.stream;
-
-          /*remoteVideo.play().catch((error) => {
-            console.warn("Autoplay bloqueado: ", error);
-          })*/
-        //});
       });
 
       call.on(VoxImplant.CallEvents.Failed, (e) => {
@@ -98,11 +84,6 @@
       call.on(VoxImplant.CallEvents.Disconnected, () => {
         console.log("Chamada encerrada");
       });
-
-      //call.on(VoxImplant.CallEvents.StreamAdded, (e) => {
-      //  console.log("Stream recebido: ", e.stream);
-      //  document.getElementById("remoteVideo").srcObject = e.stream;
-      //});
     }
 
     function endCall() {

@@ -46,17 +46,20 @@
         console.error("Falha: ", e);
       }
       
+       try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        document.getElementById("localVideo").srcObject = stream;
+        sdk.useVideoSource(stream.getVideoTracks()[0]);
+      } catch (error) {
+          console.error("Erro ao acessar câmera: ", error);
+          return;
+      }
+
       await sdk.connect();
       
       sdk.on(VoxImplant.Events.AuthResult, function (e) {
         if (e.result === true){
           console.log("Login com sucesso")
-
-          navigator.mediaDevices.getUserMedia({ video:true, audio: true})
-            .then((stream) => {
-              document.getElementById("localVideo").srcObject = stream;
-              sdk.useVideoSource(stream.getVideoTracks()[0]);
-            })
             .catch((error) => {
               console.error("Erro ao acessar câmera: ", error);
             });

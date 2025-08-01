@@ -28,6 +28,7 @@
   <script>
     const sdk = VoxImplant.getInstance()
     let currentCall = null;
+    let localStream;
 
     async function login() {
       // Choose NODE_n depends on the Voximplant account node

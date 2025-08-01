@@ -60,9 +60,6 @@
       sdk.on(VoxImplant.Events.AuthResult, function (e) {
         if (e.result === true){
           console.log("Login com sucesso")
-            .catch((error) => {
-              console.error("Erro ao acessar câmera: ", error);
-            });
         } else {
           console.log(e.code, e.message);
         }

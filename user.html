@@ -71,7 +71,7 @@
 
       call = sdk.call({
         number: "client",
-        video: { sendVideo: true, receiveVideo: true }
+        useVideo: { sendVideo: true, receiveVideo: true }
       });
 
       call.on(VoxImplant.CallEvents.StreamAdded, (e) => {

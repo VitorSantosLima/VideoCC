@@ -71,13 +71,8 @@
 
       call = sdk.call({
         number: "client",
-        useVideo: { sendVideo: true, receiveVideo: true }
+        video: { sendVideo: true, receiveVideo: true }
       });
-
-      call.on(VoxImplant.CallEvents.StreamAdded, (e) => {
-          console.log("Stream recebido: ", e.stream);
-          document.getElementById("remoteVideo").srcObject = e.stream;
-        });
 
       call.on(VoxImplant.CallEvents.Connected, () => {
         console.log("Chamada conectada");
@@ -90,10 +85,13 @@
       call.on(VoxImplant.CallEvents.Disconnected, () => {
         console.log("Chamada encerrada");
       });
+
+      call.on(VoxImplant.CallEvents.StreamAdded, (e) => {
+        document.getElementById("remoteVideo").srcObject = e.stream;
+      });
     }
 
     window.onload = initPreview;
   </script>
 </body>
 </html>
-

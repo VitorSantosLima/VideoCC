@@ -56,7 +56,7 @@
           try {
           localStream = await navigator.mediaDevices.getUserMedia({ video:true, audio: true})
           
-          document.getElementById("localVideo").srcObject = stream;
+          document.getElementById("localVideo").srcObject = localStream;
             
           } catch(error) {
               console.error("Erro ao acessar câmera: ", error);

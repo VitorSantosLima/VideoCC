@@ -90,11 +90,6 @@
       document.getElementById("remoteVideo").srcObject = e.stream;
       });
 
-      e.call.on(VoxImplant.CallEvents.Disconnected, () => {
-        console.log("Chamada encerrada");
-
-      });
-
     async function acceptCall () {
       if (currentCall) {
         currentCall.sendVideo(true);

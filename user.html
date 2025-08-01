@@ -55,8 +55,6 @@
       sdk.on(VoxImplant.Events.AuthResult, function (e) {
         if (e.result === true){
           console.log("Login com sucesso")
-          sdk.setOperatorACDStatus(VoxImplant.OperatorACDStatuses.Ready);
-          console.log("Status alterado para Ready")
         } else {
           console.log(e.code, e.message);
         }
@@ -81,16 +79,16 @@
 
       call.on(VoxImplant.CallEvents.Connected, () => {
         console.log("Chamada conectada");
-        call.on(VoxImplant.CallEvents.StreamAdded, (e) => {
-          call.sendVideo(true);
-          console.log("Stream recebido: ", e.stream);
-          const remoteVideo = document.getElementById("remoteVideo");
-          remoteVideo.srcObject = e.stream;
+        //call.on(VoxImplant.CallEvents.StreamAdded, (e) => {
+        //  call.sendVideo(true);
+          //console.log("Stream recebido: ", e.stream);
+          //const remoteVideo = document.getElementById("remoteVideo");
+          //remoteVideo.srcObject = e.stream;
 
-          remoteVideo.play().catch((error) => {
+          /*remoteVideo.play().catch((error) => {
             console.warn("Autoplay bloqueado: ", error);
-          })
-        });
+          })*/
+        //});
       });
 
       call.on(VoxImplant.CallEvents.Failed, (e) => {

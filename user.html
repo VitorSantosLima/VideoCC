@@ -87,6 +87,7 @@
       });
 
       call.on(VoxImplant.CallEvents.StreamAdded, (e) => {
+        console.log("Stream recebido: ", e.stream);
         document.getElementById("remoteVideo").srcObject = e.stream;
       });
     }

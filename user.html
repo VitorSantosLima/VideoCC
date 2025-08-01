@@ -76,6 +76,10 @@
 
       call.on(VoxImplant.CallEvents.Connected, () => {
         console.log("Chamada conectada");
+        call.on(VoxImplant.CallEvents.StreamAdded, (e) => {
+          console.log("Stream recebido: ", e.stream);
+          document.getElementById("remoteVideo").srcObject = e.stream;
+        });
       });
 
       call.on(VoxImplant.CallEvents.Failed, (e) => {
@@ -86,9 +90,10 @@
         console.log("Chamada encerrada");
       });
 
-      call.on(VoxImplant.CallEvents.StreamAdded, (e) => {
-        document.getElementById("remoteVideo").srcObject = e.stream;
-      });
+      //call.on(VoxImplant.CallEvents.StreamAdded, (e) => {
+      //  console.log("Stream recebido: ", e.stream);
+      //  document.getElementById("remoteVideo").srcObject = e.stream;
+      //});
     }
 
     window.onload = initPreview;

@@ -100,7 +100,7 @@
     async function acceptCall () {
       if (currentCall) {
         try {
-          const stream = await navigao.mediaDevices.getUserMedia({ video: true, audio: true})
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true})
 
           currentCall.answer({ video: { sendVideo: true, receiveVideo: true },
           localStream: stream });

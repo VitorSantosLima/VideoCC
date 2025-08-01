@@ -11,6 +11,7 @@
   <br><br>
   <button id="answer" onclick="acceptCall()">Accept Call</button>
   <button id="decline" onclick="declineCall()">Decline Call</button>
+  <button onclick="endCall()">End Call</button>
   <br><br>
   
   <select id="statusSelect">
@@ -98,6 +99,7 @@
     function acceptCall () {
       if (currentCall) {
         currentCall.answer({ video: { sendVideo: true, receiveVideo: true } });
+        localStream: stream
       }
     }
 
@@ -105,6 +107,13 @@
       if (currentCall) {
         currentCall.decline();
         currentCall = null;
+      }
+    }
+
+    function endCall() {
+      if (currentCall) {
+        currentCall.hangup();
+        console.log("Chamada finalizada pelo agente");
       }
     }
 

@@ -11,6 +11,7 @@
   <br><br>
 
   <button onclick="startCall()" disabled id="callButton">Iniciar Chamada</button>
+  <button onclick="endCall()">Finalizar Chamada</button>
 
   <script>
     const sdk = VoxImplant.getInstance();
@@ -99,6 +100,13 @@
       //  console.log("Stream recebido: ", e.stream);
       //  document.getElementById("remoteVideo").srcObject = e.stream;
       //});
+    }
+
+    function endCall() {
+      if (call) {
+        call.hangup();
+        console.log("Chamada finalizada pelo cliente");
+      }
     }
 
     window.onload = initPreview;

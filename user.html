@@ -7,7 +7,7 @@
   <h2>Cliente - Video Call</h2>
 
   <video id="localVideo" autoplay muted playsinline style="width: 300px; border: 1px solid gray;"></video>
-  <video id="remoteVideo" autoplay playsinline></video>
+  <video id="remoteVideo" autoplay playsinline controls></video>
   <br><br>
 
   <button onclick="startCall()" disabled id="callButton">Iniciar Chamada</button>
@@ -78,7 +78,12 @@
         console.log("Chamada conectada");
         call.on(VoxImplant.CallEvents.StreamAdded, (e) => {
           console.log("Stream recebido: ", e.stream);
-          document.getElementById("remoteVideo").srcObject = e.stream;
+          const remoteVideo = document.getElementById("remoteVideo");
+          remoteVIdeo.srcObject = e.stream;
+
+          remoteVideo.play().catch((error) => {
+            console.warn("Autoplay bloqueado: ", error);
+          })
         });
       });
 

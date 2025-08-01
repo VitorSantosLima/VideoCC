@@ -7,7 +7,7 @@
   <h2>Cliente - Video Call</h2>
 
   <video id="localVideo" autoplay muted playsinline style="width: 300px; border: 1px solid gray;"></video>
-  <video id="remoteVideo" autoplay playsinline style="width: 300px; border: 1px solid gray;"></video>
+  <video id="remoteVideo" autoplay playsinline></video>
   <br><br>
 
   <button onclick="startCall()" disabled id="callButton">Iniciar Chamada</button>
@@ -36,6 +36,7 @@
           node: ACCOUNT_NODE,
           queueType:VoxImplant.QueueTypes.SmartQueue,
           micRequired: true,
+          videosupport: true,
           showDebugInfo: true,
           showWarnings: true
         });

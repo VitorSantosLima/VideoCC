@@ -50,21 +50,20 @@
       
       await sdk.connect();
       
-      sdk.on(VoxImplant.Events.AuthResult, function (e) {
+      sdk.on(VoxImplant.Events.AuthResult, async function (e) {
         if (e.result === true){
           console.log("Login com sucesso")
-
-          /*navigator.mediaDevices.getUserMedia({ video:true, audio: true})
-            .then((stream) => {
-              document.getElementById("localVideo").srcObject = stream;
-            })
-            .catch((error) => {
+          try {
+          localStream = await navigator.mediaDevices.getUserMedia({ video:true, audio: true})
+          
+          document.getElementById("localVideo").srcObject = stream;
+            
+          } catch(error) {
               console.error("Erro ao acessar câmera: ", error);
-            });*/
+            };
         } else {
-          console.log(e.code, e.message);
+          console.log("Erro no login", e.code, e.message);
         }
-
       });
 
       const login = document.getElementById("login").value;
@@ -103,11 +102,10 @@
           const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true})
 
           currentCall.answer({ video: { sendVideo: true, receiveVideo: true },
-          localStream: stream });
+          localStream: localStream });
         } catch (e){
           console.error(e)
-        }
-        
+        }        
       }
     }
 

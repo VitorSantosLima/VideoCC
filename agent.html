@@ -54,13 +54,13 @@
         if (e.result === true){
           console.log("Login com sucesso")
 
-          navigator.mediaDevices.getUserMedia({ video:true, audio: true})
+          /*navigator.mediaDevices.getUserMedia({ video:true, audio: true})
             .then((stream) => {
               document.getElementById("localVideo").srcObject = stream;
             })
             .catch((error) => {
               console.error("Erro ao acessar câmera: ", error);
-            });
+            });*/
         } else {
           console.log(e.code, e.message);
         }
@@ -97,10 +97,17 @@
       });
     });
 
-    function acceptCall () {
+    async function acceptCall () {
       if (currentCall) {
-        currentCall.answer({ video: { sendVideo: true, receiveVideo: true },
-        localStream: stream });
+        try {
+          const stream = await navigao.mediaDevices.getUserMedia({ video: true, audio: true})
+
+          currentCall.answer({ video: { sendVideo: true, receiveVideo: true },
+          localStream: stream });
+        } catch (e){
+          console.error(e)
+        }
+        
       }
     }
 

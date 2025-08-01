@@ -98,7 +98,7 @@
 
     async function acceptCall () {
       if (currentCall) {
-        call.sendVideo(true);
+        currentCall.sendVideo(true);
         try {
           currentCall.answer({ video: { sendVideo: true, receiveVideo: true }});
         } catch (e){

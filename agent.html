@@ -10,7 +10,7 @@
   <button onclick="login()">Login</button>
   <br><br>
   <button id="answer" onclick="acceptCall()">Accept Call</button>
-  <button id="decline" onclick="decline()">Decline Call</button>
+  <button id="decline" onclick="declineCall()">Decline Call</button>
   <br><br>
   
   <select id="statusSelect">
@@ -51,9 +51,13 @@
         if (e.result === true){
           console.log("Login com sucesso")
 
-          sdk.createLocalMedia({ video: true, audio: true}).then((media) => {
-            document.getElementById("localVideo").srcObject = media.stream;
-          });
+          navigator.mediaDevices.getUserMedia({ video:true, audio: true})
+            .then((stream) => {
+              document.getElementById("localVideo").srcObject = stream;
+            })
+            .catch((error) => {
+              console.error("Erro ao acessar câmera: ", error);
+            });
         } else {
           console.log(e.code, e.message);
         }

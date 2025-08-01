@@ -90,7 +90,7 @@
       document.getElementById("remoteVideo").srcObject = e.stream;
       });
 
-      currentCall.on(VoxImplant.CallEvents.Disconnected, () => {
+      e.call.on(VoxImplant.CallEvents.Disconnected, () => {
         console.log("Chamada encerrada");
 
       });

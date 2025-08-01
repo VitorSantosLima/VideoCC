@@ -39,6 +39,8 @@
           queueType:VoxImplant.QueueTypes.SmartQueue,
           micRequired: true,
           videoSupport: true,
+          remoteVideoContainerId: "remoteVideo",
+          localVideoContainerId: "localVideo",
           showDebugInfo: true,
           showWarnings: true
         });
@@ -85,17 +87,13 @@
     sdk.on(VoxImplant.Events.IncomingCall, function (e) {
       console.log("Chamada Recebida");
       currentCall = e.call;
-
-      currentCall.on(VoxImplant.CallEvents.StreamAdded, function (e) {
-        console.log("PASSEI PELO STREAMADD");
-        document.getElementById("remoteVideo").srcObject = e.stream;
+      document.getElementById("remoteVideo").srcObject = e.stream;
       });
 
       currentCall.on(VoxImplant.CallEvents.Disconnected, function () {
         console.log("Chamada encerrada");
-        document.getElementById("remoteVideo").srcObject = null;
+
       });
-    });
 
     async function acceptCall () {
       if (currentCall) {

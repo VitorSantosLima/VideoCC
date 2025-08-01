@@ -79,7 +79,7 @@
         call.on(VoxImplant.CallEvents.StreamAdded, (e) => {
           console.log("Stream recebido: ", e.stream);
           const remoteVideo = document.getElementById("remoteVideo");
-          remoteVIdeo.srcObject = e.stream;
+          remoteVideo.srcObject = e.stream;
 
           remoteVideo.play().catch((error) => {
             console.warn("Autoplay bloqueado: ", error);

@@ -30,10 +30,12 @@
     let currentCall = null;
     let localStream;
 
+    const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9
+
     async function login() {
       
       // Choose NODE_n depends on the Voximplant account node
-      const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9
+      
 
       initParameters = {
           node: ACCOUNT_NODE,

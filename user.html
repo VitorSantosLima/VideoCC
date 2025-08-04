@@ -13,7 +13,7 @@
   <br><br> -->
   <video id="remoteVideo" autoplay playsinline></video>
 
-  <button onclick="startCall()" disabled id="callButton">Iniciar Chamada</button>
+  <button onclick="startCall()">Iniciar Chamada</button>
   <button onclick="endCall()">Finalizar Chamada</button>
 
   <script>
@@ -25,7 +25,6 @@
       try {
         localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         document.getElementById("localVideo").srcObject = localStream;
-        document.getElementById("callButton").disabled = false;
       } catch (e) {
         console.error("Erro ao acessar câmera/mic:", e);
         alert("Não foi possível acessar sua câmera/microfone. Verifique as permissões.");

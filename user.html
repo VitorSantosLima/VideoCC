@@ -52,6 +52,8 @@
       }
       
       await sdk.connect();
+
+      await sdk.login(`user@videocontactcenter.vlima.voximplant.com`, "12345678");    
       
       sdk.on(VoxImplant.Events.AuthResult, function (e) {
         if (e.result === true){
@@ -59,14 +61,15 @@
         } else {
           console.log(e.code, e.message);
         }
-
       });
-
-      await sdk.login(`user@videocontactcenter.vlima.voximplant.com`, "12345678");    
+      
     }
 
     async function startCall() {
       await login();
+
+      localStream = await navigator.mediaDevices.getUserMedia({ video:true, audio: true})
+      document.getElementById("localVideo").srcObject = localStream;
 
       call = sdk.call({
         number: "client",
@@ -93,7 +96,7 @@
       }
     }
 
-    window.onload = initPreview;
+    //window.onload = initPreview;
   </script>
 </body>
 </html>

@@ -31,6 +31,9 @@
     let localStream;
 
     async function login() {
+      
+      // Choose NODE_n depends on the Voximplant account node
+      const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9
 
       initParameters = {
           node: ACCOUNT_NODE,
@@ -42,8 +45,7 @@
           showDebugInfo: true,
           showWarnings: true
         }
-      // Choose NODE_n depends on the Voximplant account node
-      const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9
+      
       try {
         await sdk.init({initParameters});
         console.log("sdk inicializado");
@@ -53,6 +55,12 @@
       }
       
       await sdk.connect();
+      
+      const login = document.getElementById("login").value;
+      const password = document.getElementById("password").value;
+
+      await sdk.login(`${login}@videocontactcenter.vlima.voximplant.com`, password);
+
       
       sdk.on(VoxImplant.Events.AuthResult, async function (e) {
         if (e.result === true){
@@ -70,10 +78,6 @@
         }
       });
 
-      const login = document.getElementById("login").value;
-      const password = document.getElementById("password").value;
-
-      await sdk.login(`${login}@videocontactcenter.vlima.voximplant.com`, password);
     }
 
     async function statusChange() {

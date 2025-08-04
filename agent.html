@@ -30,15 +30,13 @@
     let currentCall = null;
     let localStream;
 
-    const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9
-
     async function login() {
       
       // Choose NODE_n depends on the Voximplant account node
       
 
       initParameters = {
-          node: ACCOUNT_NODE,
+          node: VoxImplant.ConnectionNode.NODE_9,
           queueType:VoxImplant.QueueTypes.SmartQueue,
           micRequired: true,
           videoSupport: true,

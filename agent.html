@@ -60,9 +60,6 @@
       const login = document.getElementById("login").value;
       const password = document.getElementById("password").value;
 
-      await sdk.login(`${login}@videocontactcenter.vlima.voximplant.com`, password);
-
-      
       sdk.on(VoxImplant.Events.AuthResult, async function (e) {
         if (e.result === true){
           console.log("Login com sucesso")
@@ -78,6 +75,8 @@
           console.log("Erro no login", e.code, e.message);
         }
       });
+
+      await sdk.login(`${login}@videocontactcenter.vlima.voximplant.com`, password);
 
     }
 

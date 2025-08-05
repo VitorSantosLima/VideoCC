@@ -19,9 +19,9 @@
   <script>
     const sdk = VoxImplant.getInstance();
     const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9;
-    let call, localStream;
+    let call/*, localStream*/;
 
-    async function initPreview() {
+    /*async function initPreview() {
       try {
         localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         document.getElementById("localVideo").srcObject = localStream;
@@ -29,12 +29,11 @@
         console.error("Erro ao acessar câmera/mic:", e);
         alert("Não foi possível acessar sua câmera/microfone. Verifique as permissões.");
       }
-    }
+    }*/
 
     async function login() {
       // Choose NODE_n depends on the Voximplant account node
-      const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9
-      
+            
       initParameters = {
         node: ACCOUNT_NODE,
         queueType:VoxImplant.QueueTypes.SmartQueue,
@@ -67,10 +66,8 @@
     }
      
     async function startCall() {
-      await login();
-
-      localStream = await navigator.mediaDevices.getUserMedia({ video:true, audio: true})
-      document.getElementById("localVideo").srcObject = localStream;
+      //localStream = await navigator.mediaDevices.getUserMedia({ video:true, audio: true})
+      //document.getElementById("localVideo").srcObject = localStream;
 
       call = sdk.call({
         number: "client",
@@ -80,7 +77,7 @@
       call.on(VoxImplant.CallEvents.Connected, async () => {
         console.log("Chamada conectada");
         try {
-          await call.sendMedia(localStream);
+          //await call.sendMedia(localStream);
           console.log("Mídia enviada com sucesso");
         } catch (error) {
           console.error("Erro ao enviar mídia:", error);
@@ -117,12 +114,15 @@
 
     function endCall() {
       if (call) {
-      call.hangup();
-      console.log("Chamada finalizada pelo cliente");
+        call.hangup();
+        console.log("Chamada finalizada pelo cliente");
       }
     }
 
-      //window.onload = initPreview;
+    window.onload = () => {
+      login();
+    };
+
     </script>
   </body>
 </html>

@@ -18,6 +18,7 @@
 
   <script>
     const sdk = VoxImplant.getInstance();
+    const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9;
     
     let call, localStream;
 
@@ -32,8 +33,6 @@
     }
 
     async function login() {
-
-      ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9;
 
       initParameters = {
         node: ACCOUNT_NODE,

@@ -100,7 +100,8 @@
       if (currentCall) {
         currentCall.sendVideo(true);
         try {
-          currentCall.answer({ video: { sendVideo: true, receiveVideo: true }});
+          //currentCall.answer({ video: { sendVideo: true, receiveVideo: true }});
+          currentCall.answer({ "sendVideo": true, "receiveVideo": true });
         } catch (e){
           console.error(e)
         }        

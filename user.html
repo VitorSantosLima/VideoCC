@@ -34,17 +34,20 @@
     async function login() {
       // Choose NODE_n depends on the Voximplant account node
       const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9
-      try {
-        await sdk.init({
-          node:ACCOUNT_NODE,
+      
+      initParameters = {
+          node: ACCOUNT_NODE,
           queueType:VoxImplant.QueueTypes.SmartQueue,
           micRequired: true,
           videoSupport: true,
           remoteVideoContainerId: "remoteVideo",
-		      localVideoContainerId: "localVideo",
+          localVideoContainerId: "localVideo",
           showDebugInfo: true,
           showWarnings: true
-        });
+        }
+
+      try {
+        await sdk.init(initParameters);
         // SDK initialized
       } catch (e) {
         // SDK init failure

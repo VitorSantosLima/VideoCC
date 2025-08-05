@@ -27,6 +27,8 @@
   
   <script>
     const sdk = VoxImplant.getInstance()
+    const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9;
+
     let currentCall = null;
     let localStream;
 
@@ -36,7 +38,7 @@
       
 
       initParameters = {
-          node:VoxImplant.ConnectionNode.NODE_9,
+          node: ACCOUNT_NODE,
           queueType:VoxImplant.QueueTypes.SmartQueue,
           micRequired: true,
           videoSupport: true,
@@ -47,7 +49,7 @@
         }
       
       try {
-        await sdk.init({initParameters});
+        await sdk.init(initParameters);
         console.log("sdk inicializado");
       } catch (e) {
         // SDK init failure

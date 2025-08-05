@@ -40,8 +40,8 @@
         queueType:VoxImplant.QueueTypes.SmartQueue,
         micRequired: true,
         videoSupport: true,
-        remoteVideoContainerId: "remoteVideo",
-        localVideoContainerId: "localVideo",
+        //remoteVideoContainerId: "remoteVideo",
+        //localVideoContainerId: "localVideo",
         showDebugInfo: true,
         showWarnings: true
       }
@@ -115,7 +115,7 @@
 
     async function acceptCall () {
       if (currentCall) {
-        currentCall.sendVideo(true);
+        currentCall.answer({ video: { sendVideo: true, receiveVideo: true }});
         try {
           currentCall.answer({ video: { sendVideo: true, receiveVideo: true }});
         } catch (e){

@@ -9,10 +9,10 @@
   <video id="localVideo" autoplay muted playsinline style="width: 300px; border: 1px solid gray;"></video>
   <!-- <div class="remoteVideo" id="remoteVideo">
     <div class="white-circle"></div>
-  </div>
-  <br><br> -->
+  </div> -->
   <video id="remoteVideo" autoplay playsinline></video>
 
+  <br><br>
   <button onclick="startCall()">Iniciar Chamada</button>
   <button onclick="endCall()">Finalizar Chamada</button>
 
@@ -89,6 +89,24 @@
       call.on(VoxImplant.CallEvents.Disconnected, () => {
         console.log("Chamada encerrada");
       });
+
+      call.on(VoxImplant.CallEvents.EndpointAdded, (event) => {
+    console.log("Endpoint remoto adicionado:", event.endpoint);
+
+    event.endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, () => {
+      console.log("Media remota adicionada");
+
+      const remoteStream = event.endpoint.mediaStream;
+      const remoteVideo = document.getElementById("remoteVideo");
+
+      if (remoteStream && remoteVideo) {
+        remoteVideo.srcObject = remoteStream;
+        remoteVideo.play();
+        console.log("Vídeo remoto conectado ao elemento");
+      } else {
+        console.warn("Falha ao conectar vídeo remoto");
+      }
+    });
     }
 
     function endCall() {

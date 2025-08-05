@@ -9,19 +9,19 @@
   <video id="localVideo" autoplay muted playsinline style="width: 300px; border: 1px solid gray;"></video>
   <!-- <div class="remoteVideo" id="remoteVideo">
     <div class="white-circle"></div>
-  </div> -->
+  </div>
+  <br><br> -->
   <video id="remoteVideo" autoplay playsinline></video>
 
-  <br><br>
   <button onclick="startCall()">Iniciar Chamada</button>
   <button onclick="endCall()">Finalizar Chamada</button>
 
   <script>
     const sdk = VoxImplant.getInstance();
     const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9;
-    let call/*, localStream*/;
+    let call, localStream;
 
-    /*async function initPreview() {
+    async function initPreview() {
       try {
         localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         document.getElementById("localVideo").srcObject = localStream;
@@ -29,24 +29,22 @@
         console.error("Erro ao acessar câmera/mic:", e);
         alert("Não foi possível acessar sua câmera/microfone. Verifique as permissões.");
       }
-    }*/
+    }
 
     async function login() {
       // Choose NODE_n depends on the Voximplant account node
-            
-      initParameters = {
-        node: ACCOUNT_NODE,
-        queueType:VoxImplant.QueueTypes.SmartQueue,
-        micRequired: true,
-        videoSupport: true,
-        remoteVideoContainerId: "remoteVideo",
-        localVideoContainerId: "localVideo",
-        showDebugInfo: true,
-        showWarnings: true
-      }
-
+      const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9
       try {
-        await sdk.init(initParameters);
+        await sdk.init({
+          node: ACCOUNT_NODE,
+          queueType:VoxImplant.QueueTypes.SmartQueue,
+          micRequired: true,
+          videoSupport: true,
+          remoteVideoContainerId: "remoteVideo",
+		      localVideoContainerId: "localVideo",
+          showDebugInfo: true,
+          showWarnings: true
+        });
         // SDK initialized
       } catch (e) {
         // SDK init failure
@@ -63,25 +61,22 @@
           console.log(e.code, e.message);
         }
       });
+      
     }
-     
+
     async function startCall() {
-      //localStream = await navigator.mediaDevices.getUserMedia({ video:true, audio: true})
-      //document.getElementById("localVideo").srcObject = localStream;
+      await login();
+
+      localStream = await navigator.mediaDevices.getUserMedia({ video:true, audio: true})
+      document.getElementById("localVideo").srcObject = localStream;
 
       call = sdk.call({
         number: "client",
         video: { sendVideo: true, receiveVideo: true }
       });
 
-      call.on(VoxImplant.CallEvents.Connected, async () => {
+      call.on(VoxImplant.CallEvents.Connected, () => {
         console.log("Chamada conectada");
-        try {
-          //await call.sendMedia(localStream);
-          console.log("Mídia enviada com sucesso");
-        } catch (error) {
-          console.error("Erro ao enviar mídia:", error);
-        }
       });
 
       call.on(VoxImplant.CallEvents.Failed, (e) => {
@@ -90,25 +85,6 @@
 
       call.on(VoxImplant.CallEvents.Disconnected, () => {
         console.log("Chamada encerrada");
-      });
-
-      call.on(VoxImplant.CallEvents.EndpointAdded, (event) => {
-        console.log("Endpoint remoto adicionado:", event.endpoint);
-
-        event.endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, () => {
-          console.log("Media remota adicionada");
-
-          const remoteStream = event.endpoint.mediaStream;
-          const remoteVideo = document.getElementById("remoteVideo");
-
-          if (remoteStream && remoteVideo) {
-            remoteVideo.srcObject = remoteStream;
-            remoteVideo.play();
-            console.log("Vídeo remoto conectado ao elemento");
-            } else {
-            console.warn("Falha ao conectar vídeo remoto");
-            }
-        });
       });
     }
 
@@ -119,10 +95,7 @@
       }
     }
 
-    window.onload = () => {
-      login();
-    };
-
-    </script>
-  </body>
+    //window.onload = initPreview;
+  </script>
+</body>
 </html>

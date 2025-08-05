@@ -27,27 +27,27 @@
   
   <script>
     const sdk = VoxImplant.getInstance()
-    // Choose NODE_n depends on the Voximplant account node
-    const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9;
-
     let currentCall = null;
     let localStream;
 
     async function login() {
       
+      // Choose NODE_n depends on the Voximplant account node
+      
+
       initParameters = {
-        node: ACCOUNT_NODE,
-        queueType:VoxImplant.QueueTypes.SmartQueue,
-        micRequired: true,
-        videoSupport: true,
-        //remoteVideoContainerId: "remoteVideo",
-        //localVideoContainerId: "localVideo",
-        showDebugInfo: true,
-        showWarnings: true
-      }
+          node:VoxImplant.ConnectionNode.NODE_9,
+          queueType:VoxImplant.QueueTypes.SmartQueue,
+          micRequired: true,
+          videoSupport: true,
+          remoteVideoContainerId: "remoteVideo",
+          localVideoContainerId: "localVideo",
+          showDebugInfo: true,
+          showWarnings: true
+        }
       
       try {
-        await sdk.init(initParameters);
+        await sdk.init({initParameters});
         console.log("sdk inicializado");
       } catch (e) {
         // SDK init failure
@@ -59,12 +59,14 @@
       const login = document.getElementById("login").value;
       const password = document.getElementById("password").value;
 
+      await sdk.login(`${login}@videocontactcenter.vlima.voximplant.com`, password);
+
+      
       sdk.on(VoxImplant.Events.AuthResult, async function (e) {
         if (e.result === true){
           console.log("Login com sucesso")
           try {
-          localStream = await navigator.mediaDevices.getUserMedia({ video:true, audio: true});
-          sdk.useLocalMediaStream(localStream);
+          localStream = await navigator.mediaDevices.getUserMedia({ video:true, audio: true})
           
           document.getElementById("localVideo").srcObject = localStream;
             
@@ -75,8 +77,6 @@
           console.log("Erro no login", e.code, e.message);
         }
       });
-
-      await sdk.login(`${login}@videocontactcenter.vlima.voximplant.com`, password);
 
     }
 
@@ -93,29 +93,12 @@
     sdk.on(VoxImplant.Events.IncomingCall, function (e) {
       console.log("Chamada Recebida");
       currentCall = e.call;
-
-      currentCall.on(VoxImplant.CallEvents.EndpointAdded, (event) => {
-      console.log("Endpoint remoto adicionado (cliente):", event.endpoint);
-
-      event.endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, () => {
-        console.log("Media remota do cliente adicionada");
-
-        const remoteStream = event.endpoint.mediaStream;
-        const remoteVideo = document.getElementById("remoteVideo");
-
-        if (remoteStream && remoteVideo) {
-          remoteVideo.srcObject = remoteStream;
-          remoteVideo.play();
-          console.log("Vídeo remoto do cliente conectado");
-        } else {
-          console.warn("Falha ao conectar vídeo remoto");
-        }
+      document.getElementById("remoteVideo").srcObject = e.stream;
       });
-    });
-  });
 
     async function acceptCall () {
       if (currentCall) {
+        currentCall.sendVideo(true);
         try {
           currentCall.answer({ video: { sendVideo: true, receiveVideo: true }});
         } catch (e){

@@ -77,8 +77,14 @@
         video: { sendVideo: true, receiveVideo: true }
       });
 
-      call.on(VoxImplant.CallEvents.Connected, () => {
+      call.on(VoxImplant.CallEvents.Connected, async () => {
         console.log("Chamada conectada");
+        try {
+          await call.sendMedia(localStream);
+          console.log("Mídia enviada com sucesso");
+        } catch (error) {
+          console.error("Erro ao enviar mídia:", error);
+        }
       });
 
       call.on(VoxImplant.CallEvents.Failed, (e) => {

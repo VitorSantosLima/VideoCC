@@ -86,11 +86,11 @@
       });
 
       call.on(VoxImplant.CallEvents.Disconnected, () => {
-       console.log("Chamada encerrada");
+        console.log("Chamada encerrada");
       });
 
       call.on(VoxImplant.CallEvents.EndpointAdded, (event) => {
-      console.log("Endpoint remoto adicionado:", event.endpoint);
+        console.log("Endpoint remoto adicionado:", event.endpoint);
 
         event.endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, () => {
           console.log("Media remota adicionada");

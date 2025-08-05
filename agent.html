@@ -92,8 +92,26 @@
     sdk.on(VoxImplant.Events.IncomingCall, function (e) {
       console.log("Chamada Recebida");
       currentCall = e.call;
-      document.getElementById("remoteVideo").srcObject = e.stream;
+
+      currentCall.on(VoxImplant.CallEvents.EndpointAdded, (event) => {
+      console.log("Endpoint remoto adicionado (cliente):", event.endpoint);
+
+      event.endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, () => {
+        console.log("Media remota do cliente adicionada");
+
+        const remoteStream = event.endpoint.mediaStream;
+        const remoteVideo = document.getElementById("remoteVideo");
+
+        if (remoteStream && remoteVideo) {
+          remoteVideo.srcObject = remoteStream;
+          remoteVideo.play();
+          console.log("Vídeo remoto do cliente conectado");
+        } else {
+          console.warn("Falha ao conectar vídeo remoto");
+        }
       });
+    });
+  });
 
     async function acceptCall () {
       if (currentCall) {
